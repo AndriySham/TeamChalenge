@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using TeamChallenge.Core;
+using TeamChallenge.Core.Models;
 
 namespace TeamChallenge.API.Controllers
 {
@@ -8,11 +9,26 @@ namespace TeamChallenge.API.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        private readonly AppDbContext context;
+
+        public TestController(AppDbContext context)
+        {
+            this.context = context;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            var value = new { id = 7 };
-            return Ok(value);
+            var listData = context.TestDatas.ToList();
+            return Ok(listData);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] TestData testData)
+        {
+            context.TestDatas.Add(testData);
+            context.SaveChanges();
+            return Created("", testData);
         }
     }
 }
