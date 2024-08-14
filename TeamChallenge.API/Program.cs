@@ -17,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 var app = builder.Build();
 
+Database.Migrate(app);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
