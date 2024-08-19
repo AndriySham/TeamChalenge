@@ -1,0 +1,32 @@
+version: '3'
+services:
+  sql:
+    container_name: sql
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: yourStrong(!)Password
+    networks:
+    - "teamch"
+    volumes:
+      - "mssqlsystem:/var/opt/mssql"
+      - "mssqluser:/var/opt/sqlserver"
+    restart: always
+  tchapi:
+    container_name: tchapi
+    image: tch_api
+    ports:
+      - "8000:8080"
+    networks:
+    - "teamch"
+    restart: always
+networks:
+  teamch:
+    driver: bridge
+volumes:
+  mssqlsystem:
+    external: true
+  mssqluser:
+    external: true
